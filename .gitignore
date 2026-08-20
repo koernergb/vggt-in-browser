@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Model artifacts and raw tensors
+*.onnx
+*.onnx_data
+*.safetensors
+*.pt
+*.pth
+*.ckpt
+bench/reference/**/*.npz
+bench/reference/**/*.npy
+bench/results/**/*.npz
+bench/results/**/*.npy
+
+# Golden fixture images require explicit provenance approval before committing.
+bench/fixtures/images/**
+!bench/fixtures/images/.gitkeep
+
+# Generated results. Compact JSON summaries may be force-added after review.
+bench/results/**
+!bench/results/.gitkeep
+bench/reference/**
+!bench/reference/.gitkeep
+
+# Frontend/build artifacts
+node_modules/
+dist/
+.vite/
+coverage/
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+

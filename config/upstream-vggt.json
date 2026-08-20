@@ -1,0 +1,24 @@
+{
+  "repository": "https://github.com/facebookresearch/vggt.git",
+  "revision": "a288dd0f14786c93483e45524328726ab7b1b4ce",
+  "checked_at": "2026-08-19",
+  "python": "3.10",
+  "torch": "2.3.1",
+  "torchvision": "0.18.1",
+  "cuda_example": "12.1",
+  "checkpoint": {
+    "default_reference_id": "facebook/VGGT-1B",
+    "commercial_alternative": "facebook/VGGT-1B-Commercial",
+    "selection_status": "human-approval-required",
+    "note": "The upstream project documents different usage/access terms for the original and commercial checkpoints. Confirm the intended project use before freezing the reference checkpoint."
+  },
+  "preprocessing": {
+    "function": "vggt.utils.load_fn.load_and_preprocess_images",
+    "mode": "crop",
+    "target_width": 518,
+    "patch_divisor": 14,
+    "input_range": [0.0, 1.0],
+    "view_order": "fixture-manifest-order"
+  }
+}
+

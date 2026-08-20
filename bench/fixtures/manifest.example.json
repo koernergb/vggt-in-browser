@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "scene_id": "replace-with-stable-scene-id",
+  "description": "Describe the scene, overlap, and intended validation use.",
+  "provenance": {
+    "source": "Who captured or published these images?",
+    "license": "Exact license or owner permission statement",
+    "permission_record": "Path or URL to supporting permission evidence",
+    "contains_sensitive_content": false,
+    "approved_for_public_repository": false,
+    "approved_by": null,
+    "approved_at": null
+  },
+  "images": [
+    {
+      "order": 0,
+      "path": "images/view-00.jpg",
+      "sha256": "replace-with-64-lowercase-hex-characters",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 123456,
+      "description": "First view"
+    },
+    {
+      "order": 1,
+      "path": "images/view-01.jpg",
+      "sha256": "replace-with-64-lowercase-hex-characters",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 123456,
+      "description": "Second overlapping view"
+    }
+  ]
+}
+

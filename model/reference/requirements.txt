@@ -1,0 +1,9 @@
+# Match the pinned upstream baseline. Install the appropriate CUDA wheels for
+# torch/torchvision before this file when the default package index is unsuitable.
+torch==2.3.1
+torchvision==0.18.1
+numpy==1.26.1
+Pillow>=10,<12
+huggingface_hub>=0.23,<1
+einops>=0.7,<1
+safetensors>=0.4,<1
