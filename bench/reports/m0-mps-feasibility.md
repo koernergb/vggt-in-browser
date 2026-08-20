@@ -1,6 +1,6 @@
 # M0 Apple MPS feasibility report
 
-- Status: measured locally; clean-commit evidence pending refresh
+- Status: measured locally; human visual validation pending
 - Date: 2026-08-19
 - Classification: exploratory, not canonical CUDA reference
 
@@ -28,6 +28,17 @@
 
 Both two-view runs were byte-for-byte identical across pose encoding, extrinsics, intrinsics, depth, depth confidence, world points, and world-point confidence. Both four-view runs were also byte-for-byte identical across the same seven tensors.
 
+## Clean-commit evidence
+
+Commit `60f1a8743345a04ffc7c02895d93f5a1f23a58bb` was measured twice with an explicitly clean worktree:
+
+| Views | Run | Model load | Inference | Total | Outcome |
+| ---: | ---: | ---: | ---: | ---: | --- |
+| 4 | clean 1 | 27.02 s | 32.58 s | 63.92 s | Success |
+| 4 | clean 2 | 19.50 s | 34.36 s | 57.12 s | Success |
+
+The two clean runs were byte-for-byte identical across all seven recorded output tensors. The observed inference range is 32.58–34.36 seconds; earlier faster runs are retained as exploratory observations rather than substituted for the clean evidence.
+
 ## Interpretation
 
 The 16 GB M4 is viable for local VGGT inference with four views. It is therefore suitable for preprocessing/postprocessing development, fixture iteration, visualization, and early export experiments.
@@ -36,8 +47,6 @@ This does not remove the CUDA reference requirement. The MPS environment uses a 
 
 ## Remaining validation
 
-1. Refresh measurements from a clean repository commit.
-2. Human review of the generated depth/point-map validation image.
-3. CUDA/Colab run using the pinned upstream environment.
-4. Numeric comparison between MPS and CUDA result bundles using identical inputs and output schemas.
-
+1. Human review of the generated depth/point-map validation image.
+2. CUDA/Colab run using the pinned upstream environment.
+3. Numeric comparison between MPS and CUDA result bundles using identical inputs and output schemas.
