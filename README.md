@@ -6,7 +6,7 @@ Research project exploring useful multi-view 3D reconstruction entirely in a Web
 
 **M0 — reference baseline is in progress.** No browser inference result has been demonstrated yet. Everything described as a target is unmeasured until a benchmark report says otherwise.
 
-An exploratory four-view MPS run now succeeds on a 16 GB M4 MacBook Pro. This establishes local development feasibility, but it is not yet the canonical CUDA reference and does not demonstrate browser/WebGPU inference.
+An exploratory four-view MPS run succeeds on a 16 GB M4 MacBook Pro and has passed human visual validation. This establishes local development feasibility, but it is not yet the canonical CUDA reference and does not demonstrate browser/WebGPU inference.
 
 Current repository contents:
 

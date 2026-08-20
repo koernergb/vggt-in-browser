@@ -1,6 +1,6 @@
 # M0 Apple MPS feasibility report
 
-- Status: measured locally; human visual validation pending
+- Status: accepted local MPS baseline; CUDA comparison pending
 - Date: 2026-08-19
 - Classification: exploratory, not canonical CUDA reference
 
@@ -47,6 +47,9 @@ This does not remove the CUDA reference requirement. The MPS environment uses a 
 
 ## Remaining validation
 
-1. Human review of the generated depth/point-map validation image.
-2. CUDA/Colab run using the pinned upstream environment.
-3. Numeric comparison between MPS and CUDA result bundles using identical inputs and output schemas.
+The repository owner reviewed the four-view validation image on 2026-08-20 and judged it plausible enough to accept as the local MPS baseline.
+
+Remaining work:
+
+1. CUDA/Colab run using the pinned upstream environment.
+2. Numeric comparison between MPS and CUDA result bundles using identical inputs and output schemas.

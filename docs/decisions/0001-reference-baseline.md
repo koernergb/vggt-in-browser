@@ -1,6 +1,6 @@
 # 0001 — Reference baseline
 
-- Status: accepted for fixture/checkpoint selection; blocked on CUDA execution and visual validation
+- Status: local MPS baseline accepted; canonical CUDA cross-check pending
 - Date: 2026-08-19
 
 ## Context
@@ -29,6 +29,8 @@ Camera plus depth/point maps are the minimum outputs needed to validate the inte
 2. Visually accept the camera/depth/point-map reconstruction before marking M0 complete.
 
 An Apple Silicon MPS run is approved as an exploratory feasibility check, beginning with two views in FP16. It does not replace the canonical CUDA evidence unless a later decision explicitly changes the reference definition.
+
+On 2026-08-20, the repository owner reviewed the generated four-view depth/point-map validation image and judged the reconstruction plausible enough to accept as the local MPS baseline. Two clean four-view runs from commit `60f1a8743345a04ffc7c02895d93f5a1f23a58bb` were byte-for-byte deterministic across all seven recorded tensors.
 
 ## Consequences
 

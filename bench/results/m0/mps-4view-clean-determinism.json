@@ -1,0 +1,90 @@
+{
+  "classification": "measured",
+  "created_at": "2026-08-20T02:36:13.047880+00:00",
+  "exactly_deterministic": true,
+  "note": "Summary deltas characterize drift but do not replace elementwise comparison of saved arrays when exact hashes differ.",
+  "runs": [
+    "bench/results/m0/mps-4view-clean-01.json",
+    "bench/results/m0/mps-4view-clean-02.json"
+  ],
+  "schema_version": 1,
+  "tensors": {
+    "depth": {
+      "dtype_equal": true,
+      "hash_equal": true,
+      "max_abs_delta": 0.0,
+      "mean_abs_delta": 0.0,
+      "min_abs_delta": 0.0,
+      "present_in_both": true,
+      "samples_equal": true,
+      "shape_equal": true,
+      "std_abs_delta": 0.0
+    },
+    "depth_conf": {
+      "dtype_equal": true,
+      "hash_equal": true,
+      "max_abs_delta": 0.0,
+      "mean_abs_delta": 0.0,
+      "min_abs_delta": 0.0,
+      "present_in_both": true,
+      "samples_equal": true,
+      "shape_equal": true,
+      "std_abs_delta": 0.0
+    },
+    "extrinsic": {
+      "dtype_equal": true,
+      "hash_equal": true,
+      "max_abs_delta": 0.0,
+      "mean_abs_delta": 0.0,
+      "min_abs_delta": 0.0,
+      "present_in_both": true,
+      "samples_equal": true,
+      "shape_equal": true,
+      "std_abs_delta": 0.0
+    },
+    "intrinsic": {
+      "dtype_equal": true,
+      "hash_equal": true,
+      "max_abs_delta": 0.0,
+      "mean_abs_delta": 0.0,
+      "min_abs_delta": 0.0,
+      "present_in_both": true,
+      "samples_equal": true,
+      "shape_equal": true,
+      "std_abs_delta": 0.0
+    },
+    "pose_enc": {
+      "dtype_equal": true,
+      "hash_equal": true,
+      "max_abs_delta": 0.0,
+      "mean_abs_delta": 0.0,
+      "min_abs_delta": 0.0,
+      "present_in_both": true,
+      "samples_equal": true,
+      "shape_equal": true,
+      "std_abs_delta": 0.0
+    },
+    "world_points": {
+      "dtype_equal": true,
+      "hash_equal": true,
+      "max_abs_delta": 0.0,
+      "mean_abs_delta": 0.0,
+      "min_abs_delta": 0.0,
+      "present_in_both": true,
+      "samples_equal": true,
+      "shape_equal": true,
+      "std_abs_delta": 0.0
+    },
+    "world_points_conf": {
+      "dtype_equal": true,
+      "hash_equal": true,
+      "max_abs_delta": 0.0,
+      "mean_abs_delta": 0.0,
+      "min_abs_delta": 0.0,
+      "present_in_both": true,
+      "samples_equal": true,
+      "shape_equal": true,
+      "std_abs_delta": 0.0
+    }
+  }
+}
