@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "scene_id": "vggt-upstream-kitchen-00-03",
+  "description": "Four adjacent views of a LEGO bulldozer on a kitchen table from the official VGGT demo assets. Selected for strong overlap, real multi-view geometry, texture, and absence of people.",
+  "provenance": {
+    "source": "facebookresearch/vggt examples/kitchen at pinned revision a288dd0f14786c93483e45524328726ab7b1b4ce",
+    "license": "VGGT License v1 (demonstration materials); project use restricted to the confirmed non-commercial research/portfolio scope",
+    "permission_record": "https://github.com/facebookresearch/vggt/blob/a288dd0f14786c93483e45524328726ab7b1b4ce/LICENSE.txt",
+    "contains_sensitive_content": false,
+    "approved_for_public_repository": false,
+    "approved_by": "repository owner; selected by agent from requested online/VGGT demo options",
+    "approved_at": "2026-08-19"
+  },
+  "images": [
+    {
+      "order": 0,
+      "path": "images/00.png",
+      "sha256": "54527a575988094058cdc1975b421c48e0f446726473d0ac21ea55ecb24e96a7",
+      "width": 779,
+      "height": 520,
+      "bytes": 691089,
+      "description": "Left-side three-quarter view"
+    },
+    {
+      "order": 1,
+      "path": "images/01.png",
+      "sha256": "0ad4c6d74c16661ed427f8100124aaf53e7fd0577b32c362f13559dfad7027a7",
+      "width": 779,
+      "height": 520,
+      "bytes": 726182,
+      "description": "Front-left three-quarter view"
+    },
+    {
+      "order": 2,
+      "path": "images/02.png",
+      "sha256": "596bd54d26f889fc80cedee81d95dda709fa134d86ac199b6509337e413246d5",
+      "width": 779,
+      "height": 520,
+      "bytes": 789490,
+      "description": "Near-front elevated view"
+    },
+    {
+      "order": 3,
+      "path": "images/03.png",
+      "sha256": "78193756310d9abaf81fa28902cf0b284260a0a916b085a7c08a4723eead1dd6",
+      "width": 779,
+      "height": 520,
+      "bytes": 828488,
+      "description": "Front-right elevated view"
+    }
+  ]
+}
+

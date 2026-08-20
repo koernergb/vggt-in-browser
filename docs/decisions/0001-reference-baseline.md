@@ -1,6 +1,6 @@
 # 0001 — Reference baseline
 
-- Status: proposed; blocked on human fixture and checkpoint approval
+- Status: accepted for fixture/checkpoint selection; blocked on CUDA execution and visual validation
 - Date: 2026-08-19
 
 ## Context
@@ -15,7 +15,9 @@ Pin upstream VGGT revision `a288dd0f14786c93483e45524328726ab7b1b4ce` for the fi
 
 Run on CUDA with BF16 on compute capability 8+ and FP16 otherwise, matching the upstream recommendation. Record the actual dtype and full device environment rather than assuming it.
 
-Use an ordered, human-approved 2–4 image fixture. Preserve compact tensor summaries and hashes by default; do not commit model weights, raw full-resolution tensors, or unapproved fixture images.
+Use official kitchen views `00.png` through `03.png` from the pinned upstream repository as the ordered four-image golden fixture. Fetch and hash them locally; do not duplicate them in this repository. Preserve compact tensor summaries and hashes by default; do not commit model weights or raw full-resolution tensors.
+
+The repository owner confirmed the project is strictly non-commercial, so the original `facebook/VGGT-1B` checkpoint under CC BY-NC 4.0 is the approved M0 reference.
 
 ## Rationale
 
@@ -23,15 +25,13 @@ Camera plus depth/point maps are the minimum outputs needed to validate the inte
 
 ## Human decisions still required
 
-1. Select the golden fixture and state whether its images may be committed publicly.
-2. Approve `facebook/VGGT-1B` for the project's intended use or select an approved alternative checkpoint.
-3. Provide a representative CUDA run if the agent environment lacks appropriate hardware.
-4. Visually accept the camera/depth/point-map reconstruction before changing this record to `accepted`.
+1. Provide a representative CUDA run if the agent environment lacks appropriate hardware.
+2. Visually accept the camera/depth/point-map reconstruction before marking M0 complete.
 
 ## Consequences
 
 - The initial baseline does not validate tracking.
 - Different upstream revisions or preprocessing modes must create a new result series.
 - A checkpoint change invalidates golden hashes and requires rerunning M0.
+- Quantized checkpoints are derived experiments and must be compared against this full-precision reference.
 - Browser work must not claim parity until it is compared to this accepted baseline.
-

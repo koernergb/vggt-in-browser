@@ -15,14 +15,11 @@ The reference environment exists to create evidence for later ONNX and browser c
 
 The machine-readable source of truth is `config/upstream-vggt.json`.
 
-## Checkpoint licensing stop gate
+## Checkpoint selection
 
-The upstream project documents different terms and access behavior for its original and commercial checkpoints. Before freezing goldens, the repository owner must confirm:
+The repository owner confirmed on 2026-08-19 that this is strictly non-commercial work. The approved M0 reference is `facebook/VGGT-1B`, whose model card identifies CC BY-NC 4.0. The 5.03 GB full-precision artifact is intentionally not committed.
 
-1. whether this project is strictly non-commercial research/portfolio work or may support commercial use; and
-2. which checkpoint identifier is approved.
-
-Do not commit or redistribute weights. Record the selected identifier and the downloaded artifact SHA-256 in the result bundle when it can be determined.
+Do not commit or redistribute weights. Record the selected identifier and the downloaded artifact SHA-256 in the result bundle when it can be determined. If the project scope ever becomes commercial, stop using this checkpoint and make a new license/checkpoint decision before continuing.
 
 ## Environment setup
 
@@ -53,7 +50,9 @@ The golden fixture must contain 2–4 ordered images with meaningful overlap, te
 - exact ordered paths;
 - width, height, byte size, and SHA-256 for each image.
 
-Fixture order is part of the test. The validator rejects missing files, hash/dimension drift, duplicate order values, and unapproved publication metadata.
+Fixture order is part of the test. The selected fixture is the first four kitchen views from the pinned official VGGT repository. Run `python model/reference/fetch_fixture.py` to retrieve only those files and verify their hashes. The images remain ignored locally rather than being duplicated in this repository.
+
+The validator rejects missing files, hash/dimension drift, duplicate order values, and incomplete provenance metadata.
 
 ## Result bundle
 
@@ -83,4 +82,3 @@ python model/reference/compare_runs.py bench/results/m0/run-01.json \
 ```
 
 Return the three unedited JSON files. Also preserve the terminal output if a run fails. Expected storage is several gigabytes for the downloaded checkpoint plus normal Python/CUDA dependencies; compact result JSON is typically small. Runtime depends strongly on GPU and view count and must be reported rather than estimated as measured.
-

@@ -33,12 +33,12 @@ M0 deliberately does not auto-download a multi-gigabyte checkpoint or assume tha
 
 1. Clone the pinned upstream VGGT revision documented in `config/upstream-vggt.json`.
 2. Create a Python 3.10 environment and install the reference requirements.
-3. Place approved fixture images outside Git or under `bench/fixtures/images/`.
-4. Copy `bench/fixtures/manifest.example.json` to `bench/fixtures/manifest.json` and fill in real provenance, license, order, dimensions, and SHA-256 values.
-5. Validate the fixture, then run the reference twice:
+3. Fetch the selected official four-view kitchen fixture. The files are hash-verified and remain ignored locally.
+4. Validate the fixture, then run the reference twice:
 
 ```bash
 python -m pip install -r model/reference/requirements.txt
+python model/reference/fetch_fixture.py
 python model/reference/validate_fixture.py bench/fixtures/manifest.json
 python model/reference/run_reference.py \
   --fixture bench/fixtures/manifest.json \
@@ -65,7 +65,7 @@ See [`docs/reference-environment.md`](docs/reference-environment.md) for exact e
 
 ## Human input currently required
 
-M0 cannot be completed until a human approves a golden 2–4 image fixture and states whether it may be committed publicly. Representative CUDA hardware is also needed to generate the reference result bundle and a human must visually validate the reconstruction before the goldens are frozen.
+The official VGGT kitchen views `00.png`–`03.png` are selected as the golden fixture and `facebook/VGGT-1B` is approved for this strictly non-commercial project. M0 still requires representative CUDA hardware to generate the reference result bundle, followed by human visual validation before the goldens are frozen.
 
 ## Source material
 
@@ -74,4 +74,3 @@ M0 cannot be completed until a human approves a golden 2–4 image fixture and s
 - [ONNX Runtime Web](https://onnxruntime.ai/docs/tutorials/web/)
 
 VGGT code and checkpoints have their own license and acceptable-use terms. This repository does not redistribute them at this stage.
-
