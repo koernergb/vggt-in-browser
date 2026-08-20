@@ -1,0 +1,10 @@
+# Exploratory Apple Silicon environment. This is intentionally newer than the
+# pinned upstream CUDA baseline because PyTorch 2.3.1 predates M4 support.
+torch==2.12.1
+torchvision==0.27.1
+numpy==1.26.1
+Pillow>=10,<12
+huggingface_hub>=0.23,<1
+einops>=0.7,<1
+safetensors>=0.4,<1
+

@@ -28,6 +28,8 @@ Camera plus depth/point maps are the minimum outputs needed to validate the inte
 1. Provide a representative CUDA run if the agent environment lacks appropriate hardware.
 2. Visually accept the camera/depth/point-map reconstruction before marking M0 complete.
 
+An Apple Silicon MPS run is approved as an exploratory feasibility check, beginning with two views in FP16. It does not replace the canonical CUDA evidence unless a later decision explicitly changes the reference definition.
+
 ## Consequences
 
 - The initial baseline does not validate tracking.

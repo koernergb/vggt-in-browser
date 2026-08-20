@@ -82,3 +82,26 @@ python model/reference/compare_runs.py bench/results/m0/run-01.json \
 ```
 
 Return the three unedited JSON files. Also preserve the terminal output if a run fails. Expected storage is several gigabytes for the downloaded checkpoint plus normal Python/CUDA dependencies; compact result JSON is typically small. Runtime depends strongly on GPU and view count and must be reported rather than estimated as measured.
+
+## Apple Silicon exploratory run
+
+An MPS run may identify operator or memory problems early, but it does not replace the canonical CUDA reference because the upstream inference path and precision recommendation target CUDA. On constrained unified-memory machines, start with the first two ordered views:
+
+```bash
+python model/reference/run_reference.py \
+  --fixture bench/fixtures/manifest.json \
+  --device mps --dtype float16 --max-views 2 \
+  --output bench/results/m0/mps-2view-run-01.json
+```
+
+If it succeeds without swapping or memory failure, repeat for determinism and then attempt `--max-views 4`. Record MPS results as a separate series; never compare a two-view MPS run to a four-view CUDA run as if only the device changed.
+
+The tested M4 environment uses `model/reference/requirements-mps.txt` with PyTorch 2.12.1. The upstream-pinned PyTorch 2.3.1 wheel is built with MPS but reports MPS unavailable on this M4/macOS combination because it predates the hardware. GPU access may also be hidden inside a restricted execution sandbox even when it works from a normal terminal.
+
+Generate the human validation image after a run saved with `--save-arrays`:
+
+```bash
+python model/reference/render_validation.py \
+  bench/reference/mps-4view-run-02.npz \
+  --output bench/reference/mps-4view-validation.png
+```

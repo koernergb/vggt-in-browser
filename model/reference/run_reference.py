@@ -11,6 +11,7 @@ import random
 import subprocess
 import time
 from datetime import datetime, timezone
+from importlib.metadata import PackageNotFoundError, distribution
 from pathlib import Path
 from typing import Any
 
@@ -38,6 +39,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--device", default="cuda")
     parser.add_argument("--dtype", choices=("auto", "float16", "bfloat16", "float32"), default="auto")
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument(
+        "--max-views",
+        type=int,
+        choices=(2, 3, 4),
+        help="Use the first N ordered fixture views for a constrained exploratory run",
+    )
     parser.add_argument("--disable-point-head", action="store_true")
     parser.add_argument("--save-arrays", type=Path, help="Optional local NPZ path; ignored by Git")
     parser.add_argument("--allow-unpinned-upstream", action="store_true")
@@ -59,6 +66,8 @@ def choose_dtype(torch: Any, device: str, requested: str) -> Any:
     if device.startswith("cuda"):
         major, _ = torch.cuda.get_device_capability(device)
         return torch.bfloat16 if major >= 8 else torch.float16
+    if device == "mps":
+        return torch.float16
     return torch.float32
 
 
@@ -73,6 +82,9 @@ def environment_metadata(torch: Any, device: str) -> dict[str, Any]:
         "cudnn": torch.backends.cudnn.version() if torch.backends.cudnn.is_available() else None,
         "device_requested": device,
         "cuda_available": bool(torch.cuda.is_available()),
+        "mps_available": bool(
+            hasattr(torch.backends, "mps") and torch.backends.mps.is_available()
+        ),
     }
     try:
         import torchvision
@@ -94,12 +106,27 @@ def environment_metadata(torch: Any, device: str) -> dict[str, Any]:
 def assert_upstream_revision(allow_unpinned: bool) -> dict[str, Any]:
     import vggt
 
-    package_path = Path(vggt.__file__).resolve()
-    repository = package_path
-    while repository.parent != repository and not (repository / ".git").exists():
-        repository = repository.parent
-    actual = git_value(["rev-parse", "HEAD"], repository) if (repository / ".git").exists() else None
-    dirty = git_value(["status", "--porcelain"], repository) if actual else None
+    package_file = getattr(vggt, "__file__", None)
+    package_paths = list(getattr(vggt, "__path__", []))
+    package_path = Path(package_file or package_paths[0]).resolve()
+    direct_url = None
+    try:
+        direct_url_text = distribution("vggt").read_text("direct_url.json")
+        direct_url = json.loads(direct_url_text) if direct_url_text else None
+    except (PackageNotFoundError, json.JSONDecodeError):
+        pass
+    actual = (direct_url or {}).get("vcs_info", {}).get("commit_id")
+    dirty = None
+    if actual is None:
+        repository = package_path
+        while repository.parent != repository and not (repository / ".git").exists():
+            repository = repository.parent
+        actual = (
+            git_value(["rev-parse", "HEAD"], repository)
+            if (repository / ".git").exists()
+            else None
+        )
+        dirty = git_value(["status", "--porcelain"], repository) if actual else None
     if not allow_unpinned and actual != PINNED_UPSTREAM_REVISION:
         raise RuntimeError(
             "Installed VGGT is not the pinned source checkout. "
@@ -108,6 +135,7 @@ def assert_upstream_revision(allow_unpinned: bool) -> dict[str, Any]:
         )
     return {
         "package_path": str(package_path),
+        "direct_url": direct_url,
         "git_revision": actual,
         "git_dirty": bool(dirty) if dirty is not None else None,
         "pinned_revision": PINNED_UPSTREAM_REVISION,
@@ -118,12 +146,16 @@ def assert_upstream_revision(allow_unpinned: bool) -> dict[str, Any]:
 def synchronize(torch: Any, device: str) -> None:
     if device.startswith("cuda"):
         torch.cuda.synchronize(device)
+    elif device == "mps":
+        torch.mps.synchronize()
 
 
 def main() -> int:
     args = parse_args()
     started = time.perf_counter()
     manifest, image_paths = validate_fixture(args.fixture)
+    if args.max_views:
+        image_paths = image_paths[: args.max_views]
 
     import torch
     from vggt.models.vggt import VGGT
@@ -132,6 +164,10 @@ def main() -> int:
 
     if args.device.startswith("cuda") and not torch.cuda.is_available():
         raise RuntimeError("CUDA was requested but is unavailable; do not substitute CPU output as the golden CUDA reference")
+    if args.device == "mps" and not (
+        hasattr(torch.backends, "mps") and torch.backends.mps.is_available()
+    ):
+        raise RuntimeError("MPS was requested but is unavailable")
     upstream = assert_upstream_revision(args.allow_unpinned_upstream)
 
     random.seed(args.seed)
@@ -169,6 +205,8 @@ def main() -> int:
     autocast = (
         torch.autocast(device_type="cuda", dtype=dtype)
         if args.device.startswith("cuda") and dtype != torch.float32
+        else torch.autocast(device_type="mps", dtype=dtype)
+        if args.device == "mps" and dtype != torch.float32
         else contextlib.nullcontext()
     )
     with torch.inference_mode(), autocast:
@@ -241,7 +279,7 @@ def main() -> int:
                     "height": entry["height"],
                     "bytes": entry["bytes"],
                 }
-                for entry in manifest["images"]
+                for entry in manifest["images"][: len(image_paths)]
             ],
         },
         "input": input_summary,

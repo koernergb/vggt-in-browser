@@ -6,6 +6,8 @@ Research project exploring useful multi-view 3D reconstruction entirely in a Web
 
 **M0 — reference baseline is in progress.** No browser inference result has been demonstrated yet. Everything described as a target is unmeasured until a benchmark report says otherwise.
 
+An exploratory four-view MPS run now succeeds on a 16 GB M4 MacBook Pro. This establishes local development feasibility, but it is not yet the canonical CUDA reference and does not demonstrate browser/WebGPU inference.
+
 Current repository contents:
 
 - detailed implementation and human stop gates in [`MILESTONES.md`](MILESTONES.md);
@@ -55,6 +57,8 @@ python model/reference/compare_runs.py \
 The reference runner defaults to `facebook/VGGT-1B`, camera/depth/point heads, preprocessing mode `crop`, and automatic BF16/FP16 selection on CUDA. These settings are recorded in every result and can be overridden explicitly. Model download may require several gigabytes and network access; do not start it unintentionally.
 
 See [`docs/reference-environment.md`](docs/reference-environment.md) for exact environment and result-bundle guidance.
+
+For the M4/MPS exploratory path, install `model/reference/requirements-mps.txt` instead of the CUDA-oriented requirements, then install the pinned VGGT source revision documented in `config/upstream-vggt.json`.
 
 ## Evidence policy
 
