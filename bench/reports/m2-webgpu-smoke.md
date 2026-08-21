@@ -1,6 +1,7 @@
 # M2 WebGPU smoke report
 
-Status: measured WebGPU execution passed; real-fixture parity pending.
+Status: measured WebGPU execution and real-fixture comparison completed; strict
+numeric parity failed and task-level visual validation is required.
 
 ## Environment
 
@@ -29,8 +30,26 @@ This proves that the current graph can load and execute through the WebGPU-only
 session configuration on the target Mac. It does not yet prove real-fixture
 browser parity or production hosting behavior.
 
-## Next check
+## Real-fixture browser comparison
 
-Run the real two-view kitchen tensor in the same retained session, compare the
-three outputs with native INT8, and record warm inference time. The harness and
-ignored parity-file preparation tool are implemented for this check.
+The ignored parity bundle was generated from the same square-padded kitchen
+input and native aggregator-INT8 outputs. Running it in the retained browser
+session measured:
+
+- warm WebGPU inference: 55.83 s;
+- depth max/mean absolute difference versus native INT8: `0.6344` / `0.02455`;
+- confidence max/mean absolute difference: `5.1439` / `0.39195`;
+- pose encoding max/mean absolute difference: `0.02590` / `0.005581`;
+- all browser output values finite.
+
+The browser path therefore executes reliably but does not meet the raw-output
+`1e-3` threshold. Its added mean drift is smaller than the previously approved
+FP32-to-INT8 drift, but raw confidence thresholds must not be reused and strict
+numeric parity must not be claimed.
+
+## Human stop gate
+
+Before this artifact is called the demo-quality browser model, render the
+browser-derived depth/camera geometry beside native INT8 and obtain human visual
+approval. If alignment is unacceptable, investigate precision-sensitive WebGPU
+nodes or retain selected operations at higher precision.
