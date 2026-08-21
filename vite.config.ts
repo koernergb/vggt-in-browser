@@ -25,6 +25,7 @@ export default defineConfig({
         response.setHeader('Content-Type', 'application/octet-stream');
         response.setHeader('Content-Length', stats.size);
         response.setHeader('Cache-Control', 'no-store');
+        if (request.method === 'HEAD') return response.end();
         createReadStream(path).pipe(response);
       });
       server.middlewares.use('/local-parity/', (request, response, next) => {
@@ -35,6 +36,7 @@ export default defineConfig({
         response.setHeader('Content-Type', name.endsWith('.json') ? 'application/json' : 'application/octet-stream');
         response.setHeader('Content-Length', stats.size);
         response.setHeader('Cache-Control', 'no-store');
+        if (request.method === 'HEAD') return response.end();
         createReadStream(path).pipe(response);
       });
     },

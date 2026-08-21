@@ -58,6 +58,23 @@ The reference runner defaults to `facebook/VGGT-1B`, camera/depth/point heads, p
 
 See [`docs/reference-environment.md`](docs/reference-environment.md) for exact environment and result-bundle guidance.
 
+## Local WebGPU harness
+
+The diagnostic page depends on a running local Vite process because model
+weights and ignored parity tensors are intentionally not bundled into Git. Keep
+this command running for as long as the page is open:
+
+```bash
+npm install
+npm run generate:smoke-model
+npm run dev -- --port 5174 --strictPort
+```
+
+If the page remains open after that process exits, the small smoke test may
+still work from browser memory while VGGT reports that local assets cannot be
+fetched. Restart the command and retry; that is a server-lifecycle error, not a
+WebGPU model failure.
+
 For the M4/MPS exploratory path, install `model/reference/requirements-mps.txt` instead of the CUDA-oriented requirements, then install the pinned VGGT source revision documented in `config/upstream-vggt.json`.
 
 ## Evidence policy

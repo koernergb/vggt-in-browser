@@ -2,8 +2,22 @@ import * as ort from 'onnxruntime-web/webgpu';
 
 let vggtSession: ort.InferenceSession | undefined;
 
+async function requireAsset(url: string, label: string) {
+  try {
+    const response = await fetch(url, {method: 'HEAD'});
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `${label} is unavailable (${detail}). The page is still open, but its local model server may have stopped. Run "npm run dev -- --port 5174 --strictPort" from the repository and retry.`,
+    );
+  }
+}
+
 async function getVggtSession() {
   if (!vggtSession) {
+    await requireAsset('/local-model/vggt-camera-depth-aggregator-int8.onnx', 'VGGT graph');
+    await requireAsset('/local-model/vggt-camera-depth-aggregator-int8.onnx.data', 'VGGT external weights');
     vggtSession = await ort.InferenceSession.create('/local-model/vggt-camera-depth-aggregator-int8.onnx', {
       executionProviders: ['webgpu'],
       graphOptimizationLevel: 'all',
@@ -19,10 +33,14 @@ async function getVggtSession() {
 self.onmessage = async ({data}: MessageEvent<{type: string}>) => {
   if (data.type === 'run-parity') {
     try {
-      const manifest = await fetch('/local-parity/manifest.json').then(response => response.json()) as {
+      await requireAsset('/local-parity/manifest.json', 'Browser parity manifest');
+      const manifestResponse = await fetch('/local-parity/manifest.json');
+      if (!manifestResponse.ok) throw new Error(`Parity manifest returned HTTP ${manifestResponse.status}`);
+      const manifest = await manifestResponse.json() as {
         input: {shape: number[]; file: string}; outputs: Record<string, {shape: number[]; file: string}>;
       };
       const inputResponse = await fetch(`/local-parity/${manifest.input.file}`);
+      if (!inputResponse.ok) throw new Error(`Parity input returned HTTP ${inputResponse.status}`);
       const inputBuffer: ArrayBuffer = await inputResponse.arrayBuffer();
       const inputData = new Float32Array(inputBuffer);
       const session = await getVggtSession();
@@ -32,6 +50,7 @@ self.onmessage = async ({data}: MessageEvent<{type: string}>) => {
       const comparisons: Record<string, {maxAbs: number; meanAbs: number; finite: boolean}> = {};
       for (const [name, metadata] of Object.entries(manifest.outputs)) {
         const expectedResponse = await fetch(`/local-parity/${metadata.file}`);
+        if (!expectedResponse.ok) throw new Error(`${name} reference returned HTTP ${expectedResponse.status}`);
         const expectedBuffer: ArrayBuffer = await expectedResponse.arrayBuffer();
         const expected = new Float32Array(expectedBuffer);
         const output = await actual[name].getData();
