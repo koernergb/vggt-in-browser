@@ -1,0 +1,17 @@
+{
+  "name": "vggt-in-browser",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "generate:smoke-model": ".venv/bin/python model/export/create_smoke_model.py"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.27.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "vite": "8.2.2"
+  }
+}

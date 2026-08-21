@@ -4,7 +4,7 @@ Research project exploring useful multi-view 3D reconstruction entirely in a Web
 
 ## Status
 
-**M0 — reference baseline is complete. M1 — native ONNX export and parity are demonstrated; browser packaging is next.** No browser inference result has been demonstrated yet. Everything described as a target is unmeasured until a benchmark report says otherwise.
+**M0 — reference baseline is complete. M1 — native ONNX export and parity are demonstrated. M2 — the INT8 candidate now executes successfully in a WebGPU-only browser session; real-fixture browser parity is next.** Everything described as a target is unmeasured until a benchmark report says otherwise.
 
 An exploratory four-view MPS run succeeds on a 16 GB M4 MacBook Pro and has passed human visual validation. Independent CUDA oracle evidence from the sibling `vggt-mlx` project is accepted for M0, with the documented limitation that its one/three-view fixtures differ from this repository's four-view kitchen fixture. None of this demonstrates browser/WebGPU inference.
 

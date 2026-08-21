@@ -1,7 +1,7 @@
 # M1 INT8 quantization spike
 
-Status: rejected by numeric threshold; awaiting human visual judgment before any
-quality-versus-size tradeoff is accepted.
+Status: rejected by the FP32 numeric threshold; accepted by the repository owner
+on 2026-08-20 as a browser feasibility candidate after visual review.
 
 ## Candidates
 
@@ -27,7 +27,7 @@ quantization, rather than blanket dynamic INT8.
 
 ## Human stop gate
 
-**STOP — quality-versus-size decision:** A human must decide whether the visible
-INT8 drift is acceptable for a portfolio demo. If it is not, keep FP32 as the
-quality baseline and continue with selective quantization; do not weaken the
-recorded numeric threshold silently.
+**RESOLVED:** The owner found the visual appearance acceptable and approved
+continuing. FP32 remains the quality baseline. The next stop is required only if
+camera-derived geometry is visibly misaligned or browser execution introduces
+another material quality-versus-size decision.

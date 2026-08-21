@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <title>VGGT Browser Lab</title>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">M2 · WebGPU parity</p>
+      <h1>VGGT Browser Lab</h1>
+      <p class="lede">A local-only capability and runtime diagnostic. This page does not upload images or model tensors.</p>
+      <section class="card">
+        <div class="heading-row"><h2>Device readiness</h2><span id="gpu-badge" class="badge">Checking…</span></div>
+        <dl id="diagnostics"></dl>
+      </section>
+      <section class="card">
+        <div class="heading-row"><h2>Known-good model</h2><span id="run-badge" class="badge neutral">Not run</span></div>
+        <p>Runs a tiny deterministic ONNX graph on WebGPU only. No WASM fallback is configured.</p>
+        <button id="run" type="button" disabled>Run WebGPU smoke test</button>
+        <pre id="result" aria-live="polite">Waiting for capability check.</pre>
+      </section>
+      <section class="card">
+        <div class="heading-row"><h2>VGGT INT8 candidate</h2><span id="vggt-badge" class="badge neutral">Not run</span></div>
+        <p>Loads the local 1.8 GiB aggregator-INT8 bundle and runs a fixed two-view zero-input compatibility probe on WebGPU only.</p>
+        <button id="run-vggt" type="button" disabled>Load and run VGGT candidate</button>
+        <button id="run-parity" type="button" disabled>Run real-fixture parity</button>
+        <pre id="vggt-result" aria-live="polite">Run the known-good test first.</pre>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
