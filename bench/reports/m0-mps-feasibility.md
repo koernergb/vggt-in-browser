@@ -1,6 +1,6 @@
 # M0 Apple MPS feasibility report
 
-- Status: accepted local MPS baseline; CUDA comparison pending
+- Status: accepted local MPS baseline; M0 complete with cross-project CUDA evidence
 - Date: 2026-08-19
 - Classification: exploratory, not canonical CUDA reference
 
@@ -51,5 +51,5 @@ The repository owner reviewed the four-view validation image on 2026-08-20 and j
 
 Remaining work:
 
-1. CUDA/Colab run using the pinned upstream environment.
-2. Numeric comparison between MPS and CUDA result bundles using identical inputs and output schemas.
+1. Optional same-kitchen CUDA/Colab run if later ONNX drift is ambiguous.
+2. Continue M1 using the accepted tolerances and evidence described in decision 0003.

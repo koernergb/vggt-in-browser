@@ -4,9 +4,9 @@ Research project exploring useful multi-view 3D reconstruction entirely in a Web
 
 ## Status
 
-**M0 — reference baseline is in progress.** No browser inference result has been demonstrated yet. Everything described as a target is unmeasured until a benchmark report says otherwise.
+**M0 — reference baseline is complete. M1 — native ONNX export and parity are demonstrated; browser packaging is next.** No browser inference result has been demonstrated yet. Everything described as a target is unmeasured until a benchmark report says otherwise.
 
-An exploratory four-view MPS run succeeds on a 16 GB M4 MacBook Pro and has passed human visual validation. This establishes local development feasibility, but it is not yet the canonical CUDA reference and does not demonstrate browser/WebGPU inference.
+An exploratory four-view MPS run succeeds on a 16 GB M4 MacBook Pro and has passed human visual validation. Independent CUDA oracle evidence from the sibling `vggt-mlx` project is accepted for M0, with the documented limitation that its one/three-view fixtures differ from this repository's four-view kitchen fixture. None of this demonstrates browser/WebGPU inference.
 
 Current repository contents:
 
@@ -69,7 +69,7 @@ For the M4/MPS exploratory path, install `model/reference/requirements-mps.txt` 
 
 ## Human input currently required
 
-The official VGGT kitchen views `00.png`–`03.png` are selected as the golden fixture and `facebook/VGGT-1B` is approved for this strictly non-commercial project. M0 still requires representative CUDA hardware to generate the reference result bundle, followed by human visual validation before the goldens are frozen.
+None. The official VGGT kitchen views `00.png`–`03.png` are selected as the golden fixture, `facebook/VGGT-1B` is approved for this strictly non-commercial project, the MPS result passed human visual validation, and the sibling `vggt-mlx` CUDA oracle is accepted for M0. The next mandatory human stop is a material quality-versus-size decision after quantization, or representative browser validation once a WebGPU build runs.
 
 ## Source material
 

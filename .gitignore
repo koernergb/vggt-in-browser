@@ -7,6 +7,8 @@ __pycache__/
 venv/
 
 # Model artifacts and raw tensors
+model/artifacts/**
+!model/artifacts/.gitkeep
 *.onnx
 *.onnx_data
 *.safetensors
@@ -38,4 +40,3 @@ coverage/
 .DS_Store
 .idea/
 .vscode/
-
