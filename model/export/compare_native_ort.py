@@ -31,6 +31,7 @@ def main() -> int:
     parser.add_argument("fixture", type=Path)
     parser.add_argument("reference", type=Path)
     parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--save-arrays", type=Path)
     args = parser.parse_args()
 
     manifest = json.loads(args.fixture.read_text(encoding="utf-8"))
@@ -51,6 +52,15 @@ def main() -> int:
             output.name: metrics(actual, expected_values[output.name])
             for output, actual in zip(session.get_outputs(), actual_values, strict=True)
         }
+    if args.save_arrays:
+        args.save_arrays.parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(
+            args.save_arrays,
+            **{
+                output.name: actual
+                for output, actual in zip(session.get_outputs(), actual_values, strict=True)
+            },
+        )
     report = {
         "schema_version": 1,
         "model": str(args.model),
