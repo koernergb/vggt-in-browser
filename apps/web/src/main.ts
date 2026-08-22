@@ -1,9 +1,10 @@
 import './style.css';
+import {renderComparison, type GeometryInputs} from './geometry';
 
 type WorkerResult =
   | {type: 'smoke-success'; output: number[]; sessionMs: number; inferenceMs: number}
   | {type: 'vggt-success'; sessionMs: number; inferenceMs: number; outputs: Record<string, {dims: readonly number[]; finite: boolean}>}
-  | {type: 'parity-success'; inferenceMs: number; comparisons: Record<string, {maxAbs: number; meanAbs: number; finite: boolean}>}
+  | {type: 'parity-success'; inferenceMs: number; comparisons: Record<string, {maxAbs: number; meanAbs: number; finite: boolean}>; browserGeometry: GeometryInputs; referenceGeometry: GeometryInputs}
   | {type: 'error'; target: 'smoke' | 'vggt'; message: string};
 
 const diagnostics = document.querySelector<HTMLDListElement>('#diagnostics')!;
@@ -15,6 +16,27 @@ const vggtBadge = document.querySelector<HTMLSpanElement>('#vggt-badge')!;
 const vggtButton = document.querySelector<HTMLButtonElement>('#run-vggt')!;
 const vggtResult = document.querySelector<HTMLPreElement>('#vggt-result')!;
 const parityButton = document.querySelector<HTMLButtonElement>('#run-parity')!;
+const geometrySection = document.querySelector<HTMLElement>('#geometry')!;
+const geometryCanvas = document.querySelector<HTMLCanvasElement>('#geometry-canvas')!;
+const confidence = document.querySelector<HTMLInputElement>('#confidence')!;
+const confidenceValue = document.querySelector<HTMLOutputElement>('#confidence-value')!;
+const projection = document.querySelector<HTMLSelectElement>('#projection')!;
+const geometryStats = document.querySelector<HTMLParagraphElement>('#geometry-stats')!;
+let lastGeometry: {reference: GeometryInputs; browser: GeometryInputs} | undefined;
+
+function refreshGeometry() {
+  if (!lastGeometry) return;
+  const keepPercent = Number(confidence.value);
+  confidenceValue.value = `${keepPercent}%`;
+  const stats = renderComparison(
+    geometryCanvas,
+    lastGeometry.reference,
+    lastGeometry.browser,
+    keepPercent,
+    projection.value as 'xy' | 'xz' | 'yz',
+  );
+  geometryStats.textContent = `Keeping the top ${keepPercent}% confidence per model · ${stats.pointCounts[0].toLocaleString()} native points · ${stats.pointCounts[1].toLocaleString()} browser points`;
+}
 
 function row(label: string, value: string) {
   diagnostics.insertAdjacentHTML('beforeend', `<dt>${label}</dt><dd>${value}</dd>`);
@@ -53,7 +75,14 @@ worker.onmessage = ({data}: MessageEvent<WorkerResult>) => {
     parityButton.disabled = false;
     vggtBadge.textContent = 'Parity measured';
     vggtBadge.className = 'badge pass';
-    vggtResult.textContent = JSON.stringify(data, null, 2);
+    vggtResult.textContent = JSON.stringify(
+      data,
+      (key, value) => key.endsWith('Geometry') ? '[transferred tensor data]' : value,
+      2,
+    );
+    lastGeometry = {reference: data.referenceGeometry, browser: data.browserGeometry};
+    geometrySection.hidden = false;
+    refreshGeometry();
     return;
   }
   if (data.type === 'vggt-success') {
@@ -104,6 +133,9 @@ parityButton.addEventListener('click', () => {
   vggtResult.textContent = 'Running the two-view kitchen fixture and comparing against native INT8.';
   worker.postMessage({type: 'run-parity'});
 });
+
+confidence.addEventListener('input', refreshGeometry);
+projection.addEventListener('change', refreshGeometry);
 
 inspectGpu().catch((error: unknown) => {
   gpuBadge.textContent = 'Error';

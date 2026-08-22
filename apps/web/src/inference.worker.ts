@@ -48,6 +48,9 @@ self.onmessage = async ({data}: MessageEvent<{type: string}>) => {
       const actual = await session.run({images: new ort.Tensor('float32', inputData, manifest.input.shape)});
       const inferenceMs = performance.now() - started;
       const comparisons: Record<string, {maxAbs: number; meanAbs: number; finite: boolean}> = {};
+      const browserGeometry: Record<string, Float32Array> = {};
+      const referenceGeometry: Record<string, Float32Array> = {};
+      const transfers: ArrayBuffer[] = [];
       for (const [name, metadata] of Object.entries(manifest.outputs)) {
         const expectedResponse = await fetch(`/local-parity/${metadata.file}`);
         if (!expectedResponse.ok) throw new Error(`${name} reference returned HTTP ${expectedResponse.status}`);
@@ -65,8 +68,14 @@ self.onmessage = async ({data}: MessageEvent<{type: string}>) => {
           finite &&= Number.isFinite(output[index]);
         }
         comparisons[name] = {maxAbs, meanAbs: sumAbs / output.length, finite};
+        browserGeometry[name] = output;
+        referenceGeometry[name] = expected;
+        transfers.push(output.buffer as ArrayBuffer, expected.buffer as ArrayBuffer);
       }
-      self.postMessage({type: 'parity-success', inferenceMs, comparisons});
+      self.postMessage(
+        {type: 'parity-success', inferenceMs, comparisons, browserGeometry, referenceGeometry},
+        {transfer: transfers},
+      );
     } catch (error) {
       self.postMessage({type: 'error', target: 'vggt', message: error instanceof Error ? error.stack ?? error.message : String(error)});
     }

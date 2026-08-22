@@ -28,6 +28,22 @@
         <button id="run-parity" type="button" disabled>Run real-fixture parity</button>
         <pre id="vggt-result" aria-live="polite">Run the known-good test first.</pre>
       </section>
+      <section id="geometry" class="card wide" hidden>
+        <div class="heading-row"><h2>Geometry validation</h2><span class="badge neutral">Human review</span></div>
+        <p>Both panels share the same world-coordinate projection and framing. Blue is view 0, orange is view 1, and C0/C1 mark predicted camera centers.</p>
+        <div class="controls">
+          <label>Keep confidence <input id="confidence" type="range" min="10" max="90" value="45" step="5" /> <output id="confidence-value">45%</output></label>
+          <label>Projection
+            <select id="projection">
+              <option value="xz">Top (X/Z)</option>
+              <option value="xy">Front (X/Y)</option>
+              <option value="yz">Side (Y/Z)</option>
+            </select>
+          </label>
+        </div>
+        <canvas id="geometry-canvas" width="1400" height="700"></canvas>
+        <p id="geometry-stats" class="muted"></p>
+      </section>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>

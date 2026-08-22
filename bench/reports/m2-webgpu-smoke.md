@@ -1,7 +1,8 @@
 # M2 WebGPU smoke report
 
 Status: measured WebGPU execution and real-fixture comparison completed; strict
-numeric parity failed and task-level visual validation is required.
+numeric parity failed. Side-by-side geometry validation is implemented and
+awaiting human approval.
 
 ## Environment
 
@@ -49,7 +50,16 @@ numeric parity must not be claimed.
 
 ## Human stop gate
 
-Before this artifact is called the demo-quality browser model, render the
-browser-derived depth/camera geometry beside native INT8 and obtain human visual
-approval. If alignment is unacceptable, investigate precision-sensitive WebGPU
-nodes or retain selected operations at higher precision.
+The browser diagnostic now unprojects native INT8 and Browser WebGPU depth with
+their respective predicted cameras and displays both point clouds with shared
+framing. It supports top, front, and side projections plus an adjustable
+per-model confidence percentile; its default 45% setting rendered 15,146 native
+points and 15,151 browser points in the validation run. The two default top-view
+panels appeared closely aligned during implementation, and projection switching
+completed without browser errors, but that observation is not human approval.
+
+**STOP:** a human must compare the panels across projections and confidence
+settings and explicitly approve or reject the geometry match. If alignment is
+unacceptable, investigate precision-sensitive WebGPU nodes or retain selected
+operations at higher precision. Do not call this the demo-quality browser model
+until that decision is recorded.
