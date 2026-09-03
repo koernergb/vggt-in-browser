@@ -30,7 +30,32 @@ async function getVggtSession() {
   return vggtSession;
 }
 
-self.onmessage = async ({data}: MessageEvent<{type: string}>) => {
+self.onmessage = async ({data}: MessageEvent<{type: string; input?: Float32Array}>) => {
+  if (data.type === 'run-user') {
+    try {
+      if (!data.input || data.input.length !== 1 * 2 * 3 * 518 * 518) throw new Error('Invalid preprocessed input shape.');
+      const sessionStarted = performance.now();
+      const session = await getVggtSession();
+      const sessionMs = performance.now() - sessionStarted;
+      const started = performance.now();
+      const actual = await session.run({images: new ort.Tensor('float32', data.input, [1, 2, 3, 518, 518])});
+      const inferenceMs = performance.now() - started;
+      const geometry: Record<string, Float32Array> = {};
+      const transfers: ArrayBuffer[] = [];
+      for (const name of ['pose_enc', 'depth', 'depth_conf']) {
+        const output = await actual[name].getData();
+        if (!(output instanceof Float32Array) || !output.every(Number.isFinite)) throw new Error(`${name} contains invalid values.`);
+        geometry[name] = output;
+        transfers.push(output.buffer as ArrayBuffer);
+      }
+      geometry.images = data.input;
+      transfers.push(data.input.buffer as ArrayBuffer);
+      self.postMessage({type: 'user-success', sessionMs, inferenceMs, geometry}, {transfer: transfers});
+    } catch (error) {
+      self.postMessage({type: 'error', target: 'user', message: error instanceof Error ? error.stack ?? error.message : String(error)});
+    }
+    return;
+  }
   if (data.type === 'run-parity') {
     try {
       await requireAsset('/local-parity/manifest.json', 'Browser parity manifest');

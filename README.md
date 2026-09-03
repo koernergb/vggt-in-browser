@@ -4,7 +4,7 @@ Research project exploring useful multi-view 3D reconstruction entirely in a Web
 
 ## Status
 
-**M0 — reference baseline is complete. M1 — native ONNX export and parity are demonstrated. M2 — the INT8 candidate executes successfully in a WebGPU-only browser session, real-fixture drift is measured, and the diagnostic renders native/WebGPU geometry side by side; human visual approval is pending.** Everything described as a target is unmeasured until a benchmark report says otherwise.
+**M0 and M1 are complete. M2 WebGPU geometry was explicitly approved. M3 is in progress: the app accepts two local images, preprocesses and reconstructs them through WebGPU, renders interactive sampled geometry, and exports PLY. Golden-scene and privacy validation remain.** Everything described as a target is unmeasured until a benchmark report says otherwise.
 
 An exploratory four-view MPS run succeeds on a 16 GB M4 MacBook Pro and has passed human visual validation. Independent CUDA oracle evidence from the sibling `vggt-mlx` project is accepted for M0, with the documented limitation that its one/three-view fixtures differ from this repository's four-view kitchen fixture. None of this demonstrates browser/WebGPU inference.
 
@@ -75,6 +75,13 @@ still work from browser memory while VGGT reports that local assets cannot be
 fetched. Restart the command and retry; that is a server-lifecycle error, not a
 WebGPU model failure.
 
+After the smoke test passes, either select exactly two overlapping local images
+or run the installed golden fixture. User images are decoded, EXIF-oriented,
+resized and white-padded entirely in the page, then transferred to the WebGPU
+worker. Drag the resulting canvas to orbit, use the wheel to zoom, adjust
+confidence/point size, or export the sampled relative-scale geometry as PLY.
+The current ONNX artifact is fixed to two views.
+
 For the M4/MPS exploratory path, install `model/reference/requirements-mps.txt` instead of the CUDA-oriented requirements, then install the pinned VGGT source revision documented in `config/upstream-vggt.json`.
 
 ## Evidence policy
@@ -86,7 +93,7 @@ For the M4/MPS exploratory path, install `model/reference/requirements-mps.txt` 
 
 ## Human input currently required
 
-**STOP — visual approval required.** Run real-fixture parity in the local WebGPU harness, compare the native INT8 and Browser WebGPU panels across the top/front/side projections and confidence settings, and explicitly approve or reject the match. The agent must not declare M2 complete or begin treating this candidate as the demo-quality model until that judgment is recorded.
+M2 geometry was approved on 2026-09-02. The next mandatory stop is M3 visual acceptance of an upload-driven golden scene and one additional permission-cleared real-world scene. The current artifact intentionally supports exactly two views; accepting two-view-only as the MVP is also a human decision before M3 can close.
 
 ## Source material
 

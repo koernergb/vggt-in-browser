@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
+    "test:web": "node --test --experimental-strip-types apps/web/src/*.test.ts",
     "generate:smoke-model": ".venv/bin/python model/export/create_smoke_model.py"
   },
   "dependencies": {

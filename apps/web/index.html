@@ -8,9 +8,20 @@
   </head>
   <body>
     <main>
-      <p class="eyebrow">M2 · WebGPU parity</p>
+      <p class="eyebrow">M3 · Local reconstruction</p>
       <h1>VGGT Browser Lab</h1>
       <p class="lede">A local-only capability and runtime diagnostic. This page does not upload images or model tensors.</p>
+      <section class="card">
+        <div class="heading-row"><h2>Your images</h2><span id="user-badge" class="badge neutral">Waiting</span></div>
+        <p>Select exactly two overlapping JPEG, PNG, or WebP images. EXIF orientation is applied, each view is resized to fit 518×518, and unused space is padded white.</p>
+        <label class="drop-zone" for="images"><strong>Choose two local images</strong><span>Maximum 25 MiB each. Files never leave this page.</span></label>
+        <input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple />
+        <div id="previews" class="previews"></div>
+        <button id="run-user" type="button" disabled>Reconstruct locally</button>
+        <button id="run-example" class="secondary" type="button" disabled>Run installed golden fixture</button>
+        <button id="cancel-user" class="secondary" type="button" disabled>Cancel</button>
+        <p id="user-result" class="status" aria-live="polite">Run the WebGPU smoke test, then select two images.</p>
+      </section>
       <section class="card">
         <div class="heading-row"><h2>Device readiness</h2><span id="gpu-badge" class="badge">Checking…</span></div>
         <dl id="diagnostics"></dl>
@@ -43,6 +54,18 @@
         </div>
         <canvas id="geometry-canvas" width="1400" height="700"></canvas>
         <p id="geometry-stats" class="muted"></p>
+      </section>
+      <section id="user-geometry" class="card wide" hidden>
+        <div class="heading-row"><h2>Interactive reconstruction</h2><span class="badge pass">Local result</span></div>
+        <p>Drag to orbit, use the wheel to zoom, and adjust filtering. Points retain source-image color; white markers and direction rays show predicted cameras.</p>
+        <div class="controls">
+          <label>Keep confidence <input id="user-confidence" type="range" min="10" max="90" value="45" step="5" /> <output id="user-confidence-value">45%</output></label>
+          <label>Point size <input id="point-size" type="range" min="1" max="4" value="2" step="0.5" /></label>
+          <button id="reset-view" class="secondary" type="button">Reset view</button>
+          <button id="export-ply" class="secondary" type="button">Export PLY</button>
+        </div>
+        <canvas id="user-canvas" width="1400" height="800"></canvas>
+        <p id="user-stats" class="muted"></p>
       </section>
     </main>
     <script type="module" src="/src/main.ts"></script>

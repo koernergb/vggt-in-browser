@@ -1,8 +1,7 @@
 # M2 WebGPU smoke report
 
-Status: measured WebGPU execution and real-fixture comparison completed; strict
-numeric parity failed. Side-by-side geometry validation is implemented and
-awaiting human approval.
+Status: complete. Measured WebGPU execution and real-fixture comparison passed
+human geometry review; strict numeric parity failed and is not claimed.
 
 ## Environment
 
@@ -58,8 +57,8 @@ points and 15,151 browser points in the validation run. The two default top-view
 panels appeared closely aligned during implementation, and projection switching
 completed without browser errors, but that observation is not human approval.
 
-**STOP:** a human must compare the panels across projections and confidence
-settings and explicitly approve or reject the geometry match. If alignment is
-unacceptable, investigate precision-sensitive WebGPU nodes or retain selected
-operations at higher precision. Do not call this the demo-quality browser model
-until that decision is recorded.
+The repository owner approved the M2 geometry match on 2026-09-02. See decision
+record `docs/decisions/0006-approve-m2-webgpu-geometry.md`. If later scenes expose
+unacceptable alignment, investigate precision-sensitive WebGPU nodes or retain
+selected operations at higher precision rather than weakening this record's
+numeric caveat.

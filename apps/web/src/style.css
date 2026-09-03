@@ -15,6 +15,14 @@ dl { display: grid; grid-template-columns: minmax(140px, .6fr) 1.4fr; gap: 10px 
 dt { color: #8298a7; } dd { margin: 0; overflow-wrap: anywhere; }
 button { border: 0; border-radius: 10px; padding: 12px 16px; color: #06110f; background: #71d8cc; font-weight: 800; cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .45; }
+button.secondary { color: #cfe5ed; background: #203844; }
+input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.drop-zone { display: flex; flex-direction: column; gap: 5px; margin: 18px 0; padding: 22px; border: 1px dashed #4c7987; border-radius: 12px; background: #0a1720; cursor: pointer; }
+.drop-zone span, .status { color: #9bb0bc; }
+.previews { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 14px; }
+.previews figure { margin: 0; }
+.previews img { width: 100%; aspect-ratio: 1.5; object-fit: cover; border-radius: 9px; }
+.previews figcaption { margin-top: 5px; color: #9bb0bc; font-size: .78rem; overflow-wrap: anywhere; }
 pre { min-height: 90px; margin: 18px 0 0; padding: 16px; overflow: auto; border-radius: 10px; background: #040a0f; color: #b7cad5; white-space: pre-wrap; }
 .controls { display: flex; flex-wrap: wrap; gap: 18px 28px; margin: 18px 0; color: #b7cad5; }
 .controls label { display: flex; align-items: center; gap: 9px; }
