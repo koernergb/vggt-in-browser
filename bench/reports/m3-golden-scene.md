@@ -3,6 +3,11 @@
 Status: automated implementation validation passed; human visual acceptance is
 required.
 
+The first human inspection identified an upside-down canvas display. This was a
+viewer-only Y-axis sign error, not an inference failure: VGGT and canvas both
+use downward-positive Y, but the initial renderer negated it. The display
+mapping was corrected on 2026-09-03; renewed human validation is required.
+
 ## Measured run
 
 - Date: 2026-09-02

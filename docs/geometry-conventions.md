@@ -11,6 +11,10 @@ unrecorded mirroring, axis swapping, scale normalization, or scene-specific
 alignment is applied. VGGT depth supplies relative scene scale, not metric
 units, so exported PLY coordinates must not be interpreted as meters.
 
+The canvas viewer preserves VGGT's downward-positive Y sign when mapping to
+canvas coordinates, which are also downward-positive. Orbiting changes only the
+view transform; the underlying geometry and PLY coordinates are not rewritten.
+
 Confidence filtering is percentile-based independently for each result. This is
 intentional because WebGPU confidence values have measured numeric drift from
 native INT8. The viewer samples every third pixel; PLY export samples every

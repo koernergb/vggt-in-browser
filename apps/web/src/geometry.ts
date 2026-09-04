@@ -128,7 +128,9 @@ export function renderOrbit(canvas: HTMLCanvasElement, inputs: GeometryInputs, k
     const yawZ = sineYaw * dx + cosineYaw * dz;
     const rotatedY = cosinePitch * dy - sinePitch * yawZ;
     const scale = Math.min(canvas.width, canvas.height) * .72 * view.zoom / span;
-    return [canvas.width / 2 + rotatedX * scale, canvas.height / 2 - rotatedY * scale];
+    // VGGT camera/image coordinates use +Y downward. Canvas coordinates do too,
+    // so preserve that sign here; negating it makes reconstructions appear upside down.
+    return [canvas.width / 2 + rotatedX * scale, canvas.height / 2 + rotatedY * scale];
   };
   const colors = ['#35b9f1', '#ff8a3d'];
   for (const point of geometry.points) {
