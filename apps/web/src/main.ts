@@ -94,6 +94,7 @@ async function inspectGpu() {
   gpuBadge.className = 'badge pass';
   runButton.disabled = false;
   result.textContent = 'Ready to test ONNX Runtime Web.';
+  runButton.click();
 }
 
 function createWorker() { return new Worker(new URL('./inference.worker.ts', import.meta.url), {type: 'module'}); }

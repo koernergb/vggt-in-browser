@@ -8,37 +8,48 @@
   </head>
   <body>
     <main>
-      <p class="eyebrow">M3 · Local reconstruction</p>
-      <h1>VGGT Browser Lab</h1>
-      <p class="lede">A local-only capability and runtime diagnostic. This page does not upload images or model tensors.</p>
-      <section class="card">
-        <div class="heading-row"><h2>Your images</h2><span id="user-badge" class="badge neutral">Waiting</span></div>
-        <p>Select exactly two overlapping JPEG, PNG, or WebP images. EXIF orientation is applied, each view is resized to fit 518×518, and unused space is padded white.</p>
-        <label class="drop-zone" for="images"><strong>Choose two local images</strong><span>Maximum 25 MiB each. Files never leave this page.</span></label>
+      <header class="hero">
+        <div class="brand-mark" aria-hidden="true">V</div>
+        <div>
+          <p class="privacy-pill"><span></span> Private, on-device processing</p>
+          <h1>VGGT Browser Lab</h1>
+          <p class="lede">Turn two overlapping photos into an interactive 3D reconstruction—entirely on your GPU, without uploading them.</p>
+        </div>
+      </header>
+      <section class="card featured">
+        <div class="heading-row"><div><p class="step">01 · Add photos</p><h2>Your images</h2></div><span id="user-badge" class="badge neutral">Waiting</span></div>
+        <p class="section-copy">Choose two views of the same object or scene with plenty of visual overlap.</p>
+        <label class="drop-zone" for="images"><span class="upload-icon" aria-hidden="true">↑</span><strong>Choose two local images</strong><span>JPEG, PNG or WebP · 25 MiB maximum each</span><small>Images never leave this device</small></label>
         <input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple />
         <div id="previews" class="previews"></div>
-        <button id="run-user" type="button" disabled>Reconstruct locally</button>
-        <button id="run-example" class="secondary" type="button" disabled>Run installed golden fixture</button>
-        <button id="cancel-user" class="secondary" type="button" disabled>Cancel</button>
-        <p id="user-result" class="status" aria-live="polite">Run the WebGPU smoke test, then select two images.</p>
+        <div class="actions">
+          <button id="run-user" type="button" disabled>Reconstruct locally <span aria-hidden="true">→</span></button>
+          <button id="run-example" class="secondary" type="button" disabled>Try the example</button>
+          <button id="cancel-user" class="ghost" type="button" disabled>Cancel</button>
+        </div>
+        <p id="user-result" class="status" aria-live="polite">Checking WebGPU compatibility…</p>
       </section>
-      <section class="card">
-        <div class="heading-row"><h2>Device readiness</h2><span id="gpu-badge" class="badge">Checking…</span></div>
-        <dl id="diagnostics"></dl>
-      </section>
-      <section class="card">
-        <div class="heading-row"><h2>Known-good model</h2><span id="run-badge" class="badge neutral">Not run</span></div>
-        <p>Runs a tiny deterministic ONNX graph on WebGPU only. No WASM fallback is configured.</p>
-        <button id="run" type="button" disabled>Run WebGPU smoke test</button>
-        <pre id="result" aria-live="polite">Waiting for capability check.</pre>
-      </section>
-      <section class="card">
-        <div class="heading-row"><h2>VGGT INT8 candidate</h2><span id="vggt-badge" class="badge neutral">Not run</span></div>
-        <p>Loads the local 1.8 GiB aggregator-INT8 bundle and runs a fixed two-view zero-input compatibility probe on WebGPU only.</p>
-        <button id="run-vggt" type="button" disabled>Load and run VGGT candidate</button>
-        <button id="run-parity" type="button" disabled>Run real-fixture parity</button>
-        <pre id="vggt-result" aria-live="polite">Run the known-good test first.</pre>
-      </section>
+      <details class="advanced">
+        <summary><span><strong>Device & model diagnostics</strong><small>WebGPU compatibility, smoke tests and parity tools</small></span><span class="summary-arrow">⌄</span></summary>
+        <div class="diagnostic-grid">
+          <section class="card">
+            <div class="heading-row"><h2>Device readiness</h2><span id="gpu-badge" class="badge">Checking…</span></div>
+            <dl id="diagnostics"></dl>
+          </section>
+          <section class="card">
+            <div class="heading-row"><h2>WebGPU verification</h2><span id="run-badge" class="badge neutral">Not run</span></div>
+            <p>Runs a tiny deterministic ONNX graph on WebGPU only.</p>
+            <button id="run" type="button" disabled>Run WebGPU smoke test</button>
+            <pre id="result" aria-live="polite">Waiting for capability check.</pre>
+          </section>
+          <section class="card diagnostic-wide">
+            <div class="heading-row"><h2>VGGT INT8 candidate</h2><span id="vggt-badge" class="badge neutral">Not run</span></div>
+            <p>Loads the local 1.8 GiB two-view model for compatibility and real-fixture parity checks.</p>
+            <div class="actions"><button id="run-vggt" type="button" disabled>Run compatibility probe</button><button id="run-parity" class="secondary" type="button" disabled>Run fixture parity</button></div>
+            <pre id="vggt-result" aria-live="polite">Run the WebGPU test first.</pre>
+          </section>
+        </div>
+      </details>
       <section id="geometry" class="card wide" hidden>
         <div class="heading-row"><h2>Geometry validation</h2><span class="badge neutral">Human review</span></div>
         <p>Both panels share the same world-coordinate projection and framing. Blue is view 0, orange is view 1, and C0/C1 mark predicted camera centers.</p>
@@ -56,7 +67,7 @@
         <p id="geometry-stats" class="muted"></p>
       </section>
       <section id="user-geometry" class="card wide" hidden>
-        <div class="heading-row"><h2>Interactive reconstruction</h2><span class="badge pass">Local result</span></div>
+        <div class="heading-row"><div><p class="step">02 · Explore</p><h2>Interactive reconstruction</h2></div><span class="badge pass">Local result</span></div>
         <p>Drag to orbit, use the wheel to zoom, and adjust filtering. Points retain source-image color; white markers and direction rays show predicted cameras.</p>
         <div class="controls">
           <label>Keep confidence <input id="user-confidence" type="range" min="10" max="90" value="45" step="5" /> <output id="user-confidence-value">45%</output></label>
